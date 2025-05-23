@@ -10,4 +10,5 @@ public class DockerApplication {
 		SpringApplication.run(DockerApplication.class, args);
 	}
 
+	TestBunny tb = new TestBunny();
 }
