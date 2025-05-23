@@ -1,11 +1,11 @@
-# Use a base image with Java installed
-FROM openjdk:17-jdk-slim
+# Use OpenJDK image
+FROM openjdk:17-jdk-alpine
 
-# Add the JAR file to the container
-ADD target/docker.jar docker.jar
+# Set working directory
+WORKDIR /app
 
-# Expose the port your application runs on (if necessary)
-EXPOSE 9098
+# Copy JAR file (adjust name accordingly)
+COPY target/*.jar app.jar
 
-# Command to run the application
-CMD ["java", "-jar", "docker.jar"]
+# Run app
+ENTRYPOINT ["java", "-jar", "app.jar"]
