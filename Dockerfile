@@ -1,11 +1,11 @@
-# Use OpenJDK image
+# Use a lightweight OpenJDK base image
 FROM openjdk:17-jdk-alpine
 
-# Set working directory
+# Set working directory inside container
 WORKDIR /app
 
-# Copy JAR file (adjust name accordingly)
-COPY target/*.jar app.jar
+# Copy the built jar into the container
+COPY target/docker-0.0.1-SNAPSHOT.jar app.jar
 
-# Run app
+# Set the startup command
 ENTRYPOINT ["java", "-jar", "app.jar"]
