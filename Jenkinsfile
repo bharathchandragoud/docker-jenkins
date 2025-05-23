@@ -29,7 +29,7 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
+                    docker.withRegistry('https://index.docker.io/v1/', '2a5a834d-51a6-41d8-b656-f94e37179af1') {
                         dockerImage.push('latest')
                     }
                 }
