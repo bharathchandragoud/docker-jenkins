@@ -2,17 +2,11 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "bharathchandragoudme/jenkindocker"
+        DOCKER_IMAGE = 'bharathchandragoudme/jenkindocker'
     }
 
     stages {
-        stage('Clone') {
-            steps {
-                git 'https://github.com/bharathchandragoud/docker-jenkins.git'
-            }
-        }
-
-        stage('Build JAR') {
+        stage('Build') {
             steps {
                 sh 'mvn clean package -DskipTests'
             }
@@ -20,19 +14,21 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    dockerImage = docker.build("${IMAGE_NAME}")
+                sh "docker build -t $DOCKER_IMAGE ."
+            }
+        }
+
+        stage('Login to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: '2a5a834d-51a6-41d8-b656-f94e37179af1', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
                 }
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Push Image') {
             steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', '2a5a834d-51a6-41d8-b656-f94e37179af1') {
-                        dockerImage.push('latest')
-                    }
-                }
+                sh "docker push $DOCKER_IMAGE"
             }
         }
     }
